@@ -145,7 +145,6 @@ class CrimeDetailFragment : Fragment() {
                 requireActivity().onBackPressed()
             }
         }
-
     }
 
     override fun onDestroyView() {
