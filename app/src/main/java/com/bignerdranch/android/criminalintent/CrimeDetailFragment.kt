@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.text.format.DateFormat
+import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
@@ -134,6 +136,16 @@ class CrimeDetailFragment : Fragment() {
                 bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
             crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            if (isCrimeTitleEmpty()) {
+                showToast("Cannot leave title empty!!!")
+            } else {
+                isEnabled = false
+                requireActivity().onBackPressed()
+            }
+        }
+
     }
 
     override fun onDestroyView() {
@@ -252,5 +264,14 @@ class CrimeDetailFragment : Fragment() {
                 binding.crimePhoto.tag = null
             }
         }
+    }
+
+    private fun isCrimeTitleEmpty(): Boolean {
+        val currentTitle = binding.crimeTitle.text.toString()
+        return currentTitle.isEmpty()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }
